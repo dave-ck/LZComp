@@ -46,20 +46,14 @@ def bitwise_LZ():
 
 def main():
     bits = read_bits("./files/source.txt")
-    W = 15
-    L = 15
-    n = 8   # byte-wise
+    W = 511
+    L = 255
+    n = 1600   # byte-wise
     out = lz77.n_bitwise_encode(bits, W, L, n)
-    print()
-    print("Source:", bits)
+    print(out)
     print("Source length:", len(bits))
-    print("Encoded:", out)
     print("Encoded length:", len(out))
-    print("Remainder:", len(out) % (6 + 5 + 8))
-
     back = lz77.n_bitwise_decode(out, W, L, n)
-    print("Back:", back)
-    print("In:", bits)
     print("Success:", back==bits)
     write_bits("./files/out.txt", back)
 
