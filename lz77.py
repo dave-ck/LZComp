@@ -21,6 +21,7 @@ def n_bitwise_encode(bits, W, L, n):
     pos = 0
     window = bits[max(0, pos - W * n):pos]
     buffer = bits[pos:pos + L * n]
+    loadbar = 0
     while pos < len(bits):
         # for each n-bit "word" (for n=8, for each byte)
         l = n
@@ -45,6 +46,10 @@ def n_bitwise_encode(bits, W, L, n):
         pos += l
         window = bits[max(0, pos - W * n):pos]
         buffer = bits[pos:pos + L * n]
+        loadbar += l
+        if loadbar > 100000:
+            print("Progress: {} bits of {} read so far.".format(pos, len(bits)))
+            loadbar = 0
     return encoded
 
 
