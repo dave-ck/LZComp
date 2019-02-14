@@ -200,6 +200,23 @@ def master_batch():
 
 
 def raspi_batch():
+    L_W_set = [(6, 8), (8, 8), (6, 16), (8, 12), (8, 16), (12, 12), (12, 16), (16, 16)]
+    datasets = {"shakespeare": shakespeare(3), "fhir": fhir_set(3)}
+    # datasets.update({"beethoven": beethoven(3), "league": lol_music(3)}
+    for log2L, log2W in L_W_set:
+        for data_name in datasets:
+            # noinspection PyBroadException
+            # need to run overnight and not produce results even if some files aren't readable/compressible
+            print("Processing data-{}-Wbits-{}-Lbits-{}".format(data_name, log2W, log2L))
+            try:
+                data = datasets[data_name]
+                # write_json("LZSS-data-{}-Wbits-{}-Lbits-{}".format(data_name, log2W, log2L),
+                #           lzss_batch(2 ** log2W - 1, 2 ** log2L - 1, data))
+                write_json("LZ77-data-{}-Wbits-{}-Lbits-{}".format(data_name, log2W, log2L),
+                           lz77_batch(2 ** log2W - 1, 2 ** log2L - 1, data))
+            except Exception:
+                print("ERROR WITH data-{}-Wbits-{}-Lbits-{}".format(data_name, log2W, log2L))
+                pass
     return
 
 
