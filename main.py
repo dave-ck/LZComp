@@ -200,6 +200,7 @@ def master_batch():
 
 
 def raspi_batch():
+
     L_W_set = [(6, 8), (8, 8), (6, 16), (8, 12), (8, 16), (12, 12), (12, 16), (16, 16)]
     datasets = {"shakespeare": shakespeare(3), "fhir": fhir_set(3)}
     # datasets.update({"beethoven": beethoven(3), "league": lol_music(3)}
@@ -214,8 +215,9 @@ def raspi_batch():
                 #           lzss_batch(2 ** log2W - 1, 2 ** log2L - 1, data))
                 write_json("LZ77-data-{}-Wbits-{}-Lbits-{}".format(data_name, log2W, log2L),
                            lz77_batch(2 ** log2W - 1, 2 ** log2L - 1, data))
-            except Exception:
+            except Exception as e:
                 print("ERROR WITH data-{}-Wbits-{}-Lbits-{}".format(data_name, log2W, log2L))
+                print(e)
                 pass
     return
 
