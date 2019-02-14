@@ -34,7 +34,7 @@ def load_data():
                 except Exception as e:
                     print(e)
                     print(alg)
-                    print(L,W)
+                    print(L, W)
                     print(source_filename)
                     errors += 1
                     pass
@@ -199,4 +199,13 @@ def master_batch():
                 pass
 
 
-print(len(json.dumps(load_data(), indent=4)))
+def raspi_batch():
+    return
+
+
+if __name__ == '__main__':
+    # facilitates running from pi zero
+    print("Hello RasPI")
+    raspi_batch()
+
+# print(len(json.dumps(load_data(), indent=4)))
