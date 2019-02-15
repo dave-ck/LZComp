@@ -19,25 +19,27 @@ def load_data():
     # for clarity: source_file refers to the file compressed and decompressed.
     # metadata_file refers to the json file written elsewhere in this program
     for file_name in os.listdir("./outputs/json/raw/"):
-        with open("./outputs/json/raw/" + file_name, "r") as json_file:
-            metadata_file = json.load(json_file)
-            for source_filename in metadata_file:
-                # source_extension = source_filename[source_filename.index('.'):]
-                sourcefile_metadata = metadata_file[source_filename]
-                # identify L and W
-                L, W = sourcefile_metadata["L"], sourcefile_metadata["W"]
-                # identify algorithm used
-                alg = file_name[:4].lower()
-                # update data set
-                try:
-                    data[alg][str((L, W))].update({source_filename: metadata_file[source_filename]})
-                except Exception as e:
-                    print(e)
-                    print(alg)
-                    print(L, W)
-                    print(source_filename)
-                    errors += 1
-                    pass
+        if file_name[-5:] == ".json":
+            with open("./outputs/json/raw/" + file_name, "r") as json_file:
+                print(file_name)
+                metadata_file = json.load(json_file)
+                for source_filename in metadata_file:
+                    # source_extension = source_filename[source_filename.index('.'):]
+                    sourcefile_metadata = metadata_file[source_filename]
+                    # identify L and W
+                    L, W = sourcefile_metadata["L"], sourcefile_metadata["W"]
+                    # identify algorithm used
+                    alg = file_name[:4].lower()
+                    # update data set
+                    try:
+                        data[alg][str((L, W))].update({source_filename: metadata_file[source_filename]})
+                    except Exception as e:
+                        print(e)
+                        print(alg)
+                        print(L, W)
+                        print(source_filename)
+                        errors += 1
+                        pass
     print("finished wih {} errors writing into the dictionary".format(errors))
     return data
 
@@ -201,25 +203,48 @@ def master_batch():
 
 def raspi_batch():
     L_W_set = [(6, 8), (8, 8), (6, 16), (8, 12), (8, 16), (12, 12), (12, 16), (16, 16)]
-    datasets = {"shakespeare": shakespeare(3), "fhir": fhir_set(3)}
+    datasets = {"shakespeare": shakespeare(5), "fhir": fhir_set(10), "numb": ["./files/numbers/pi.txt"]}
     # datasets.update({"beethoven": beethoven(3), "league": lol_music(3)}
     for log2L, log2W in L_W_set:
         for data_name in datasets:
             # noinspection PyBroadException
             # need to run overnight and not produce results even if some files aren't readable/compressible
             print("Processing data-{}-Wbits-{}-Lbits-{}".format(data_name, log2W, log2L))
-
             data = datasets[data_name]
-            # write_json("LZSS-data-{}-Wbits-{}-Lbits-{}".format(data_name, log2W, log2L),
-            #           lzss_batch(2 ** log2W - 1, 2 ** log2L - 1, data))
+            write_json("LZSS-data-{}-Wbits-{}-Lbits-{}".format(data_name, log2W, log2L),
+                       lzss_batch(2 ** log2W - 1, 2 ** log2L - 1, data))
             write_json("LZ77-data-{}-Wbits-{}-Lbits-{}".format(data_name, log2W, log2L),
                        lz77_batch(2 ** log2W - 1, 2 ** log2L - 1, data))
-    return
+    print("Finished .txt batch")
+
+
+def raspi_lena_batch():
+    L_W_set = [(8, 8), (8, 16)]
+    datasets = {"lena": ["./files/pngs/lena.png"]}
+    for log2L, log2W in L_W_set:
+        for data_name in datasets:
+            print("Processing data-{}-Wbits-{}-Lbits-{}".format(data_name, log2W, log2L))
+            data = datasets[data_name]
+            write_json("LZSS-data-{}-Wbits-{}-Lbits-{}".format(data_name, log2W, log2L),
+                       lzss_batch(2 ** log2W - 1, 2 ** log2L - 1, data))
+            write_json("LZ77-data-{}-Wbits-{}-Lbits-{}".format(data_name, log2W, log2L),
+                       lz77_batch(2 ** log2W - 1, 2 ** log2L - 1, data))
+    print("Finished .png batch")
+
+
+def raspi_dump():
+    with open("./outputs/json/raspi.json", "w") as jsonfile:
+        json.dump(load_data(), jsonfile)
 
 
 if __name__ == '__main__':
     # facilitates running from pi zero
     print("Hello RasPI")
     raspi_batch()
+    raspi_dump()
+    print("Dumped data - now attempting to compress lena.png")
+    raspi_lena_batch()
+    raspi_dump()
+    print("Success! Finished compressing lena.png")
 
 # print(len(json.dumps(load_data(), indent=4)))
