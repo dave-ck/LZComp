@@ -10,10 +10,10 @@ def lzss_bytewise_encode(bits, W, L):
         print("Padding {} bits".format(bits.fill()))
     source_bytes = bytes(bits.tobytes())
     # log2_W is the number of bits needed to represent W
-    log2_W = math.ceil(int(math.log(W + 1, 2)))
+    log2_W = int(math.ceil(math.log(W + 1, 2)))
     WintConverter = "0" + str(int(log2_W)) + "b"
     # log2_L is the number of bits needed to represent L
-    log2_L = math.ceil(int(math.log(L + 1, 2)))
+    log2_L = int(math.ceil(math.log(L + 1, 2)))
     LintConverter = "0" + str(int(log2_L)) + "b"
     # encoding n characters as a tuple requires 1 + log2_W + log2_L + 8 bits
     lempelength = log2_L + log2_W + 9
@@ -30,7 +30,7 @@ def lzss_bytewise_encode(bits, W, L):
             l += 1
             flag = True
         # check whether it is shorter or longer to encode (0,0,m) l times over or (rel_pos, l-1, m)
-        if flag and l * 9> lempelength:
+        if flag and l * 9 > lempelength:
             # finds first occurrence within buffer
             rel_pos = min(pos, W) - window.find(buffer[:l - 1])
             # 1 is the flag for a (w, l, m) tuple
@@ -49,9 +49,9 @@ def lzss_bytewise_encode(bits, W, L):
 
 def lzss_bytewise_decode(encoded_bits, W, L):
     # log2_W is the number of bits needed to represent W
-    log2_W = math.ceil(int(math.log(W + 1, 2)))
+    log2_W = int(math.ceil(math.log(W + 1, 2)))
     # log2_L is the number of bits needed to represent L
-    log2_L = math.ceil(int(math.log(L + 1, 2)))
+    log2_L = int(math.ceil(math.log(L + 1, 2)))
     # print("log2W = {}, log2L = {}".format(log2_W, log2_L))
     source = bitarray.bitarray()
     readpos = 0
@@ -64,11 +64,11 @@ def lzss_bytewise_decode(encoded_bits, W, L):
             print(readpos)
             print(log2_W)
             print("Encoded bits", encoded_bits[0:5])
-            print(encoded_bits[int(readpos):int(readpos+log2_W)])
-            print(encoded_bits[int(readpos):int(readpos+log2_W)].to01())
-            print(encoded_bits[readpos:int(readpos+log2_W)])
-            print(encoded_bits[readpos:readpos+log2_W])
-            print(encoded_bits[readpos:readpos+log2_W].to01())
+            print(encoded_bits[int(readpos):int(readpos + log2_W)])
+            print(encoded_bits[int(readpos):int(readpos + log2_W)].to01())
+            print(encoded_bits[readpos:int(readpos + log2_W)])
+            print(encoded_bits[readpos:readpos + log2_W])
+            print(encoded_bits[readpos:readpos + log2_W].to01())
             d = int(encoded_bits[readpos:readpos + log2_W].to01(), 2)
             readpos += log2_W
             # read in l
@@ -96,10 +96,10 @@ def lz77_bytewise_encode(bits, W, L):
         print("Padding {} bits".format(bits.fill()))
     source_bytes = bytes(bits.tobytes())
     # log2_W is the number of bits needed to represent W
-    log2_W = math.ceil(int(math.log(W + 1, 2)))
+    log2_W = int(math.ceil(math.log(W + 1, 2)))
     WintConverter = "0" + str(int(log2_W)) + "b"
     # log2_L is the number of bits needed to represent L
-    log2_L = math.ceil(int(math.log(L + 1, 2)))
+    log2_L = int(math.ceil(math.log(L + 1, 2)))
     LintConverter = "0" + str(int(log2_L)) + "b"
     encoded = bitarray.bitarray()
     # pos is bytewise address
@@ -139,10 +139,10 @@ def lz77_n_bitwise_encode(bits, W, L, n):
         print("len(bits) = {} is not divisible by given n = {}. Returned false.".format(len(bits), n))
         return False
     # log2_W is the number of bits needed to represent W
-    log2_W = math.ceil(int(math.log(W + 1, 2)))
+    log2_W = int(math.ceil(math.log(W + 1, 2)))
     WintConverter = "0" + str(int(log2_W)) + "b"
     # log2_L is the number of bits needed to represent L
-    log2_L = math.ceil(int(math.log(L + 1, 2)))
+    log2_L = int(math.ceil(math.log(L + 1, 2)))
     LintConverter = "0" + str(int(log2_L)) + "b"
     encoded = bitarray.bitarray()
     # pos is a bitwise address - translate to indexing address by dividing by n
@@ -184,9 +184,9 @@ def lz77_n_bitwise_encode(bits, W, L, n):
 # decodes for both n_bitwise and bytewise encoders
 def lz77_n_bitwise_decode(encoded_bits, W, L, n):
     # log2_W is the number of bits needed to represent W
-    log2_W = math.ceil(int(math.log(W + 1, 2)))
+    log2_W = int(math.ceil(math.log(W + 1, 2)))
     # log2_L is the number of bits needed to represent L
-    log2_L = math.ceil(int(math.log(L + 1, 2)))
+    log2_L = int(math.ceil(math.log(L + 1, 2)))
     # print("log2W = {}, log2L = {}".format(log2_W, log2_L))
     source = bitarray.bitarray()
     readpos = 0
