@@ -61,6 +61,14 @@ def lzss_bytewise_decode(encoded_bits, W, L):
         readpos += 1
         if flag:
             # read in d
+            print(readpos)
+            print(log2_W)
+            print("Encoded bits", encoded_bits[0:5])
+            print(encoded_bits[int(readpos):int(readpos+log2_W)])
+            print(encoded_bits[int(readpos):int(readpos+log2_W)].to01())
+            print(encoded_bits[readpos:int(readpos+log2_W)])
+            print(encoded_bits[readpos:readpos+log2_W])
+            print(encoded_bits[readpos:readpos+log2_W].to01())
             d = int(encoded_bits[readpos:readpos + log2_W].to01(), 2)
             readpos += log2_W
             # read in l
