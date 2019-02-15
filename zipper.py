@@ -11,10 +11,10 @@ def lzss_bytewise_encode(bits, W, L):
     source_bytes = bytes(bits.tobytes())
     # log2_W is the number of bits needed to represent W
     log2_W = math.ceil(math.log(W + 1, 2))
-    WintConverter = "0" + str(log2_W) + "b"
+    WintConverter = "0" + str(int(log2_W)) + "b"
     # log2_L is the number of bits needed to represent L
     log2_L = math.ceil(math.log(L + 1, 2))
-    LintConverter = "0" + str(log2_L) + "b"
+    LintConverter = "0" + str(int(log2_L)) + "b"
     # encoding n characters as a tuple requires 1 + log2_W + log2_L + 8 bits
     lempelength = log2_L + log2_W + 9
     encoded = bitarray.bitarray()
@@ -96,10 +96,10 @@ def lz77_bytewise_encode(bits, W, L):
     source_bytes = bytes(bits.tobytes())
     # log2_W is the number of bits needed to represent W
     log2_W = math.ceil(math.log(W + 1, 2))
-    WintConverter = "0" + str(log2_W) + "b"
+    WintConverter = "0" + str(int(log2_W)) + "b"
     # log2_L is the number of bits needed to represent L
     log2_L = math.ceil(math.log(L + 1, 2))
-    LintConverter = "0" + str(log2_L) + "b"
+    LintConverter = "0" + str(int(log2_L)) + "b"
     encoded = bitarray.bitarray()
     # pos is bytewise address
     pos = 0
@@ -139,10 +139,10 @@ def lz77_n_bitwise_encode(bits, W, L, n):
         return False
     # log2_W is the number of bits needed to represent W
     log2_W = math.ceil(math.log(W + 1, 2))
-    WintConverter = "0" + str(log2_W) + "b"
+    WintConverter = "0" + str(int(log2_W)) + "b"
     # log2_L is the number of bits needed to represent L
     log2_L = math.ceil(math.log(L + 1, 2))
-    LintConverter = "0" + str(log2_L) + "b"
+    LintConverter = "0" + str(int(log2_L)) + "b"
     encoded = bitarray.bitarray()
     # pos is a bitwise address - translate to indexing address by dividing by n
     pos = 0
