@@ -36,6 +36,10 @@ def lzss_bytewise_encode(bits, W, L):
             # 1 is the flag for a (w, l, m) tuple
             print(rel_pos)
             print(l-1)
+            print(WintConverter)
+            print(LintConverter)
+            print(format(int(rel_pos), WintConverter))
+            print(format(int(l - 1), LintConverter))
             print('1' + format(int(rel_pos), WintConverter) + format(int(l - 1), LintConverter))
             encoded.extend('1' + format(rel_pos, WintConverter) + format(l - 1, LintConverter))
             encoded.frombytes(buffer[l - 1:l])
