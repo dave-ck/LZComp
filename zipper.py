@@ -34,6 +34,9 @@ def lzss_bytewise_encode(bits, W, L):
             # finds first occurrence within buffer
             rel_pos = min(pos, W) - window.find(buffer[:l - 1])
             # 1 is the flag for a (w, l, m) tuple
+            print(rel_pos)
+            print(l-1)
+            print('1' + format(int(rel_pos), WintConverter) + format(int(l - 1), LintConverter))
             encoded.extend('1' + format(rel_pos, WintConverter) + format(l - 1, LintConverter))
             encoded.frombytes(buffer[l - 1:l])
             pos += l
